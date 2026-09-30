@@ -1,5 +1,4 @@
 #include "puzzle.hpp"
-#include <utility>
 
 std::vector<Board> get_neighbours(Board& board) {
     std::vector<Board> neighbours;
@@ -24,39 +23,14 @@ std::vector<Board> get_neighbours(Board& board) {
         int new_row = zero_row + move.first;
         int new_col = zero_col + move.second;
 
-        if (new_row  >= 0 && new_row < rows_size && new_col >= 0 && new_col < cols_size) {
+        if (new_row >= 0 && new_row < rows_size && new_col >= 0 && new_col < cols_size) {
             auto neighbour = board;
-            
             std::swap(neighbour[zero_row][zero_col], neighbour[new_row][new_col]);
             neighbours.push_back(neighbour);
         }
     }
 
     return neighbours;
-}
-
-int heuristic(const Board& board) {
-    int h = 0;
-    int rows_size = board.size();
-    int cols_size = board[0].size();
-
-    for (int row = 0; row < rows_size; row++) {
-        for (int col = 0; col < cols_size; col++) {
-            int value = board[row][col];
-
-            if (value == 0) {
-                continue;
-            }
-
-            int goal_row = (value - 1) / cols_size;
-            int goal_col = (value - 1) % cols_size;
-
-            h += abs(row - goal_row);
-            h += abs(col - goal_col);
-        }
-    }
-
-    return h;
 }
 
 std::string serialize(const Board& board) {
