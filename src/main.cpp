@@ -2,7 +2,8 @@
 #include <sstream>
 #include "astar.hpp"
 
-// build with ./build/solve "1 2 3 4 5 6 7 8 9 10 11 0 13 14 15 12"
+// mkdir -p build && g++ -std=c++17 -O2 -o build/solve src/main.cpp src/puzzle.cpp src/astar.cpp
+// ./build/solve "1 2 3 4 5 6 7 8 9 10 11 0 13 14 15 12"
 // Parses 16 space-separated integers into a 4x4 board
 static bool parseBoard(const std::string& s, Board& board) {
     std::istringstream iss(s);
@@ -11,6 +12,13 @@ static bool parseBoard(const std::string& s, Board& board) {
         for (int col = 0; col < 4; col++)
             if (!(iss >> board[row][col])) return false;
     return true;
+}
+
+static void printBoard(const Board& board) {
+    for (auto& row : board) {
+        for (int v : row) std::cout << v << " ";
+        std::cout << "\n";
+    }
 }
 
 int main(int argc, char** argv) {
@@ -27,12 +35,19 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    int moves = solve(board);
+    SolveResult result = solve(board);
 
-    if (moves == -1) {
-        std::cout << "No solution found (or search space exhausted).\n";
-    } else {
-        std::cout << "Solved in " << moves << " moves.\n";
+    if (result.moves == -1) {
+        std::cout << "No solution found (unexpected for a solvable board).\n";
+        return 1;
+    }
+
+    std::cout << "Solved in " << result.moves << " moves.\n\n";
+    std::cout << "Solution path:\n";
+    for (size_t step = 0; step < result.path.size(); step++) {
+        std::cout << "Step " << step + 1 << ":\n";
+        printBoard(result.path[step]);
+        std::cout << "\n";
     }
 
     return 0;

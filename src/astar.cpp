@@ -28,7 +28,9 @@ int heuristic(const Board& board) {
     return h;
 }
 
-int solve(Board board) {
+SolveResult solve(Board board) {
+    SolveResult result;
+
     Board end{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
 
     using State = std::tuple<int, int, Board>;
@@ -40,12 +42,28 @@ int solve(Board board) {
     std::unordered_set<std::string> closed{};
     closed.insert(serialize(board));
 
+    std::unordered_map<std::string, std::string> parent;
+    std::unordered_map<std::string, Board> keyToBoard;
+    keyToBoard[serialize(board)] = board;
+
     while (!open.empty()) {
         auto [f, g, cur_board] = open.top();
         open.pop();
 
         if (cur_board == end) {
-            return g;
+            std::vector<Board> path;
+            std::string key = serialize(cur_board);
+            while (true) {
+                path.push_back(keyToBoard[key]);
+                auto it = parent.find(key);
+                if (it == parent.end()) break;
+                key = it->second;
+            }
+            std::reverse(path.begin(), path.end());
+
+            result.moves = g;
+            result.path = path;
+            return result;
         }
 
         for (auto& neighbour : get_neighbours(cur_board)) {
@@ -54,11 +72,13 @@ int solve(Board board) {
                 continue;
             }
             closed.insert(key);
+            parent[key] = serialize(cur_board);
+            keyToBoard[key] = neighbour;
 
             int new_g = g + 1;
             open.push({new_g + heuristic(neighbour), new_g, neighbour});
         }
     }
 
-    return -1;
+    return result;
 }
