@@ -1,0 +1,24 @@
+# Compiled executables
+/build/
+/src/build/
+/src/main
+/src/solve
+
+# C++ build artifacts
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.out
+*.dSYM/
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# IDE and editor temporary files
+*.swp
+*.swo
+*~
+.vscode/*.log

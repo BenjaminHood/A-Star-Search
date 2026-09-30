@@ -37,7 +37,6 @@ int slidingPuzzle(Board board) {
             int new_g = g + 1;
             open.push({new_g + heuristic(neighbour), new_g, neighbour});
         }
-
     }
 return -1;
 }
