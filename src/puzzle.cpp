@@ -1,4 +1,5 @@
 #include "puzzle.hpp"
+#include <random>
 
 std::vector<Board> get_neighbours(Board& board) {
     std::vector<Board> neighbours;
@@ -38,4 +39,16 @@ std::string serialize(const Board& board) {
     for (auto& row : board)
         for (int v : row) s += char('0' + v);
     return s;
+}
+
+Board randomScramble(int moves, unsigned seed) {
+    Board board{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
+
+    std::mt19937 rng(seed);
+    for (int i = 0; i < moves; i++) {
+        auto options = get_neighbours(board);
+        std::uniform_int_distribution<size_t> dist(0, options.size() - 1);
+        board = options[dist(rng)];
+    }
+    return board;
 }
