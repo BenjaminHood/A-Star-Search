@@ -60,21 +60,20 @@ int main(int argc, char** argv) {
         board = randomScramble(scrambleMoves, seed);
     }
 
-    std::cout << "Start:\n";
-    printBoard(board);
-    std::cout << "\n";
+    if (!isSolvable(board)) {
+        std::cout << "This configuration is not solvable.\n";
+        return 0;
+    }
 
     SolveResult result = solve(board);
 
-    if (result.moves == -1) {
-        std::cout << "No solution found (unexpected for a solvable board).\n";
-        return 1;
-    }
-
     std::cout << "Solved in " << result.moves << " moves.\n\n";
     std::cout << "Solution path:\n";
-    for (size_t step = 0; step < result.path.size(); step++) {
-        std::cout << "Step " << step + 1 << ":\n";
+    std::cout << "Start:\n";
+    printBoard(board);
+    std::cout << "\n";
+    for (size_t step = 1; step < result.path.size(); step++) {
+        std::cout << "Step " << step << ":\n";
         printBoard(result.path[step]);
         std::cout << "\n";
     }

@@ -11,12 +11,13 @@ g++ -std=c++17 -O2 -o build/solve src/main.cpp src/puzzle.cpp src/astar.cpp
 
 ## Usage
 
-Solve a specific board by entering 16 space-seperated values, `0` for the blank space, for example: 
+Solve a specific board by entering 16 space-seperated values, `0` for the blank space, or generate a random solvable board with N legal moves from the goal and seed S.
+
+Examples:
+
 ```bash
 ./build/solve --board "1 2 3 4 5 6 7 8 9 10 11 0 13 14 15 12"
 ```
-
-Or generate a random solvable board with N legal moves from the goal, for example:
 
 ```bash
 ./build/solve --scramble 20 --seed 7

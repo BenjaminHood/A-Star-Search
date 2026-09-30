@@ -41,6 +41,29 @@ std::string serialize(const Board& board) {
     return s;
 }
 
+bool isSolvable(const Board& board) {
+    int rows = board.size();
+    int cols = board[0].size();
+
+    std::vector<int> tiles;
+    int blank_row = 0;
+    for (int row = 0; row < rows; row++) {
+        for (int col = 0; col < cols; col++) {
+            int v = board[row][col];
+            if (v == 0) blank_row = row;
+            else tiles.push_back(v);
+        }
+    }
+
+    int inversions = 0;
+    for (size_t i = 0; i < tiles.size(); i++)
+        for (size_t j = i + 1; j < tiles.size(); j++)
+            if (tiles[i] > tiles[j]) inversions++;
+
+    int blank_row_from_bottom = rows - blank_row;
+    return (inversions + blank_row_from_bottom) % 2 == 1;
+}
+
 Board randomScramble(int moves, unsigned seed) {
     Board board{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
 
